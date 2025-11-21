@@ -1,0 +1,46 @@
+[WARNING] ME(1520899,7f56afc7f740,python):2025-11-21-11:18:58.000.402 [mindspore/ccsrc/runtime/hardware_abstract/device_context/device_context_manager.cc:602] SelectGpuPlugin] Env CUDA_HOME is /usr/local/cuda, but can not find suitable gpu plugin.
+[WARNING] ME(1520899:140010293032768,MainProcess):2025-11-21-11:18:59.369.000 [mindspore/context.py:1334] For 'context.set_context', the parameter 'device_target' will be deprecated and removed in a future version. Please use the api mindspore.set_device() instead.
+[WARNING] ME(1520899:140010293032768,MainProcess):2025-11-21-11:18:59.432.000 [mindspore/train/serialization.py:1853] For 'load_param_into_net', remove parameter prefix name: optimizer., continue to load.
+[WARNING] ME(1520899:140010293032768,MainProcess):2025-11-21-11:18:59.433.000 [mindspore/train/serialization.py:1853] For 'load_param_into_net', remove parameter prefix name: model_with_loss.model., continue to load.
+使用CPU
+
+======================================================================
+SRC训练 - Concept级别（138个KC）
+======================================================================
+Agent: SRC
+数据集: assist09_kcs
+DKT模型: ./SavedModels/DKT_assist09_kcs_concept138.ckpt
+批次大小: 128
+学习路径类型: 0
+学习步数: 10
+目标KC数量: 3
+训练轮数: 50
+学习率: 0.001
+======================================================================
+
+random seed set to be 42
+✅ 数据集加载成功:
+   - KC数量: 138
+   - 学生数量: 5985
+
+
+加载Concept级别DKT模型:
+  模型路径: ./SavedModels/DKT_assist09_kcs_concept138.ckpt
+  KC数量: 138
+  ✅ 模型加载成功
+
+创建Agent: SRC
+  加载Agent: SRC
+  Embedding维度: 128
+  隐藏层维度: 128
+
+Traceback (most recent call last):
+  File "/mnt/hpfs/xiangc/mxy/lpr-r1/DKT/trainSRC_concepts.py", line 504, in <module>
+    main(args_)
+  File "/mnt/hpfs/xiangc/mxy/lpr-r1/DKT/trainSRC_concepts.py", line 327, in main
+    model = load_agent(args)
+            ^^^^^^^^^^^^^^^^
+  File "/mnt/hpfs/xiangc/mxy/lpr-r1/DKT/trainSRC_concepts.py", line 490, in load_agent
+    return SRC(args)
+           ^^^^^^^^^
+TypeError: SRC.__init__() missing 4 required positional arguments: 'input_size', 'weight_size', 'hidden_size', and 'dropout'

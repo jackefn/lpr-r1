@@ -1,0 +1,664 @@
+# ===============================================================================================
+# The following shows the last analyze fail log message.
+# ===============================================================================================
+
+----------------------------------------------------
+- Caught exception:
+----------------------------------------------------
+For primitive[Concat] only support one axis different, bug got more than one(shapes is [const vector]{[const vector]{1, 10, 128}, [const vector]{1, 1, 1}})!
+
+----------------------------------------------------
+- C++ Call Stack: (For framework developers)
+----------------------------------------------------
+mindspore/ops/infer/ops_func_impl//concat.cc:77 CheckShapesValid
+
+----------------------------------------------------
+- The Traceback of Net Construct Code:
+----------------------------------------------------
+# 0 In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:59, 26~87
+        targets, states = self.begin_episode(targets, initial_logs, initial_log_scores)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 1 In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:44~48, 8~35
+        if initial_logs is not None:
+        ^
+# 2 In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:45, 21~70
+            states = self.step(initial_logs, initial_log_scores, None)
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 3 In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 20~62
+        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 4 In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/function/array_func.py:370, 11~29
+    return cat(tensors, axis)
+           ^~~~~~~~~~~~~~~~~~
+# 5 In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/auto_generate/gen_ops_def.py:6442, 11~37
+    return concat_impl(tensors, axis)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ===============================================================================================
+# The following shows the IR when the function graphs evaluation fails to help locate the problem.
+# You can search the last ------------------------> to the node which is evaluated failure.
+# Refer to https://www.mindspore.cn/search?inputValue=analyze_fail.ir to get more instructions.
+# ===============================================================================================
+
+# IR entry: @Scripts_Agent_SRC_SRC_construct_807
+# Total subgraphs: 0
+
+# Attrs:
+compile_phase: predict.1763696905374594304.140491298296400.2......0
+training: 0
+
+# Total params: 8
+# Params:
+%para1_targets: <null>
+%para2_initial_logs: <null>
+%para3_initial_log_scores: <null>
+%para4_origin_path: <null>
+%para5_n: <null>
+%para6_embedding.embedding_table: <Ref[Tensor[Float32]], (138, 128), ref_key=embedding.embedding_table, is_parameter>  :  has_default
+%para7_l2.weight: <Ref[Tensor[Float32]], (128, 128), ref_key=l2.weight, is_parameter>  :  has_default
+%para8_l2.bias: <Ref[Tensor[Float32]], (128), ref_key=l2.bias, is_parameter>  :  has_default
+
+subgraph attr:
+compile_phase: predict.1763696905374594304.140491298296400.2......0
+training: 0
+subgraph instance: Scripts_Agent_SRC_SRC_construct_807 : 0xc571700
+# In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:57~106, 4~40/    @ms_function/
+subgraph @Scripts_Agent_SRC_SRC_construct_807() {
+  %0(CNode_813) = resolve(NameSpace[Entry: 'Scripts.Agent.SRC.SRC.construct'], Scripts.Agent.SRC.SRC.construct)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+
+#------------------------> 0
+  %1(CNode_814) = %0(%para1_targets, %para2_initial_logs, %para3_initial_log_scores, %para4_origin_path, %para5_n)
+      : (<Tensor[Int32], (1, 3)>, <Tensor[Int32], (1, 10)>, <Tensor[Float32], (1, 1)>, <Tensor[Int32], (1, 10)>, <Int64, NoShape>) -> (<null>)
+      #scope: (Default)
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:72~96, 8~29/        for i in range(n):/
+}
+# Order:
+#   1: @Scripts_Agent_SRC_SRC_construct_807:CNode_813{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Entry: 'Scripts.Agent.SRC.SRC.construct', [2]: ValueNode<Symbol> Scripts.Agent.SRC.SRC.construct}
+#   2: @Scripts_Agent_SRC_SRC_construct_807:CNode_814{[0]: CNode_813, [1]: param_targets, [2]: param_initial_logs, [3]: param_initial_log_scores, [4]: param_origin_path, [5]: param_n}
+#   3: @Scripts_Agent_SRC_SRC_construct_807:CNode_815{[0]: ValueNode<Primitive> Return, [1]: CNode_814}
+
+
+subgraph attr:
+compile_phase: predict.1763696905374594304.140491298296400.2......0
+training: 0
+subgraph instance: Scripts_Agent_SRC_SRC_construct_807 : 0x12aee4e0
+# In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:57~106, 4~40/    @ms_function/
+subgraph @Scripts_Agent_SRC_SRC_construct_807(%para0_targets, %para0_initial_logs, %para0_initial_log_scores, %para0_origin_path, %para0_n) {
+  %0(CNode_816) = resolve(NameSpace[SymbolStr: 'Namespace:Scripts.Agent.SRC'], mnp)
+      : (<External, NoShape>, <External, NoShape>) -> (<External, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 24~27/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %1(CNode_817) = getattr(%0, "zeros_like")
+      : (<External, NoShape>, <String, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 24~38/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %2(CNode_818) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], getitem)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 39~53/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %3(CNode_819) = resolve(NameSpace[ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>'], l2)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:60, 17~24/        inputs = self.l2(self.embedding(origin_path))/
+  %4(CNode_820) = resolve(NameSpace[ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>'], embedding)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:60, 25~39/        inputs = self.l2(self.embedding(origin_path))/
+  %5(CNode_821) = %4(%para0_origin_path)
+      : (<Tensor[Int32], (1, 10)>) -> (<Tensor[Float32], (1, 10, 128)>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:60, 25~52/        inputs = self.l2(self.embedding(origin_path))/
+  %6(encoder_states) = %3(%5)
+      : (<Tensor[Float32], (1, 10, 128)>) -> (<Tensor[Float32], (1, 10, 128)>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:60, 17~53/        inputs = self.l2(self.embedding(origin_path))/
+  %7(CNode_822) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], MakeTuple)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 46~52/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %8(CNode_823) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], make_slice)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 46~47/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %9(CNode_824) = %8(None, None, None)
+      : (<None, NoShape>, <None, NoShape>, <None, NoShape>) -> (<Slice[None : None : None], NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 46~47/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %10(CNode_825) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], make_slice)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 49~52/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %11(CNode_826) = %10(I64(0), I64(1), None)
+      : (<Int64, NoShape>, <Int64, NoShape>, <None, NoShape>) -> (<Slice[Int64 : Int64 : None], NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 49~52/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %12(CNode_827) = %7(%9, %11)
+      : (<Slice[None : None : None], NoShape>, <Slice[Int64 : Int64 : None], NoShape>) -> (<Tuple[Slice[None : None : None],Slice[Int64 : Int64 : None]], TupleShape(NoShape, NoShape)>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 46~52/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %13(CNode_828) = %2(%6, %12)
+      : (<Tensor[Float32], (1, 10, 128)>, <Tuple[Slice[None : None : None],Slice[Int64 : Int64 : None]], TupleShape(NoShape, NoShape)>) -> (<Tensor[Float32], (1, 1, 128)>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 39~53/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %14(decoder_input) = %1(%13)
+      : (<Tensor[Float32], (1, 1, 128)>) -> (<Tensor[Float32], (1, 1, 128)>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:65, 24~54/        decoder_input = mnp.zeros_like(inputs[:, 0:1])  # (B, 1, I)/
+  %15(CNode_829) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], getitem)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:59, 8~87/        targets, states = self.begin_episode(targets, initial_logs, initial_log_scores)/
+  %16(CNode_830) = resolve(NameSpace[ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>'], begin_episode)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:59, 26~44/        targets, states = self.begin_episode(targets, initial_logs, initial_log_scores)/
+
+#------------------------> 1
+  %17(CNode_831) = %16(%para0_targets, %para0_initial_logs, %para0_initial_log_scores)
+      : (<Tensor[Int32], (1, 3)>, <Tensor[Int32], (1, 10)>, <Tensor[Float32], (1, 1)>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:59, 26~87/        targets, states = self.begin_episode(targets, initial_logs, initial_log_scores)/
+  %18(states) = %15(%17, I64(1))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:59, 8~87/        targets, states = self.begin_episode(targets, initial_logs, initial_log_scores)/
+  %19(CNode_832) = getattr(%0, "zeros_like")
+      : (<External, NoShape>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~33/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %20(CNode_833) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], MakeTuple)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %21(CNode_834) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], getitem)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 34~49/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %22(CNode_835) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], MakeTuple)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 41~48/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %23(CNode_836) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], make_slice)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 41~42/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %24(CNode_837) = %23(None, None, None)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 41~42/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %25(CNode_838) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], make_slice)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 44~45/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %26(CNode_839) = %25(None, None, None)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 44~45/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %27(CNode_840) = %22(%24, %26, I64(0))
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 41~48/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %28(CNode_841) = %21(%6, %27)
+      : (<Tensor[Float32], (1, 10, 128)>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 34~49/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %29(CNode_842) = %20(%28)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %30(CNode_843) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], make_dict)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %31(CNode_844) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], MakeTuple)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %32(CNode_845) = %31("dtype")
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %33(CNode_846) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], MakeTuple)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %34(CNode_847) = resolve(NameSpace[SymbolStr: 'Namespace:Scripts.Agent.SRC'], dtype)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 57~62/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %35(CNode_848) = getattr(%34, "bool_")
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 57~68/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %36(CNode_849) = %33(%35)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %37(CNode_850) = %30(%32, %36)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %38(selected) = DoUnpackCall(%19, %29, %37)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:69, 19~69/        selected = mnp.zeros_like(inputs[:, :, 0], dtype=dtype.bool_)/
+  %39(CNode_851) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], getitem)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:66, 8~29/        probs, paths = [], []/
+  %40(CNode_852) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], MakeTuple)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:66, 23~29/        probs, paths = [], []/
+  %41(CNode_853) = %40([], [])
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:66, 23~29/        probs, paths = [], []/
+  %42(paths) = %39(%41, I64(1))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:66, 8~29/        probs, paths = [], []/
+  %43(probs) = %39(%41, I64(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:66, 8~29/        probs, paths = [], []/
+  %44(CNode_854) = call @↵Scripts_Agent_SRC_SRC_construct_855(I64(0), %14, %18, %38, [], %42, %43)
+      : (<null>, <Tensor[Float32], (1, 1, 128)>, <null>, <null>, <null>, <null>, <null>) -> (<null>)
+      #scope: (Default)
+  Return(%44)
+      : (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:72~96, 8~29/        for i in range(n):/
+}
+# Order:
+#   1: @Scripts_Agent_SRC_SRC_construct_807:CNode_830{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> begin_episode}
+#   2: @Scripts_Agent_SRC_SRC_construct_807:CNode_856{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   4: @Scripts_Agent_SRC_SRC_construct_807:CNode_831{[0]: CNode_830, [1]: param_targets, [2]: param_initial_logs, [3]: param_initial_log_scores}
+#   5: @Scripts_Agent_SRC_SRC_construct_807:CNode_829{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> getitem}
+#   6: @Scripts_Agent_SRC_SRC_construct_807:targets{[0]: CNode_829, [1]: CNode_831, [2]: ValueNode<Int64Imm> 0}
+#   7: @Scripts_Agent_SRC_SRC_construct_807:states{[0]: CNode_829, [1]: CNode_831, [2]: ValueNode<Int64Imm> 1}
+#   8: @Scripts_Agent_SRC_SRC_construct_807:CNode_819{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> l2}
+#   9: @Scripts_Agent_SRC_SRC_construct_807:CNode_820{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> embedding}
+#  10: @Scripts_Agent_SRC_SRC_construct_807:CNode_857{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  12: @Scripts_Agent_SRC_SRC_construct_807:CNode_821{[0]: CNode_820, [1]: param_origin_path}
+#  13: @Scripts_Agent_SRC_SRC_construct_807:CNode_858{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  15: @Scripts_Agent_SRC_SRC_construct_807:encoder_states{[0]: CNode_819, [1]: CNode_821}
+#  16: @Scripts_Agent_SRC_SRC_construct_807:CNode_859{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> path_encoder}
+#  17: @Scripts_Agent_SRC_SRC_construct_807:CNode_860{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  19: @Scripts_Agent_SRC_SRC_construct_807:encoder_states{[0]: CNode_859, [1]: encoder_states}
+#  20: @Scripts_Agent_SRC_SRC_construct_807:CNode_861{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> add}
+#  21: @Scripts_Agent_SRC_SRC_construct_807:encoder_states{[0]: CNode_861, [1]: encoder_states, [2]: encoder_states}
+#  22: @Scripts_Agent_SRC_SRC_construct_807:CNode_862{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> W1}
+#  23: @Scripts_Agent_SRC_SRC_construct_807:CNode_863{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:Scripts.Agent.SRC', [2]: ValueNode<Symbol> ops}
+#  24: @Scripts_Agent_SRC_SRC_construct_807:CNode_864{[0]: ValueNode<Primitive> getattr, [1]: CNode_863, [2]: ValueNode<StringImm> mean}
+#  25: @Scripts_Agent_SRC_SRC_construct_807:CNode_865{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  26: @Scripts_Agent_SRC_SRC_construct_807:CNode_866{[0]: CNode_865, [1]: encoder_states}
+#  27: @Scripts_Agent_SRC_SRC_construct_807:CNode_867{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  28: @Scripts_Agent_SRC_SRC_construct_807:CNode_868{[0]: CNode_867, [1]: ValueNode<StringImm> axis, [2]: ValueNode<StringImm> keep_dims}
+#  29: @Scripts_Agent_SRC_SRC_construct_807:CNode_869{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  30: @Scripts_Agent_SRC_SRC_construct_807:CNode_870{[0]: CNode_869, [1]: ValueNode<Int64Imm> 1, [2]: ValueNode<BoolImm> true}
+#  31: @Scripts_Agent_SRC_SRC_construct_807:CNode_871{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_dict}
+#  32: @Scripts_Agent_SRC_SRC_construct_807:CNode_872{[0]: CNode_871, [1]: CNode_868, [2]: CNode_870}
+#  33: @Scripts_Agent_SRC_SRC_construct_807:CNode_873{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_864, [2]: CNode_866, [3]: CNode_872}
+#  34: @Scripts_Agent_SRC_SRC_construct_807:CNode_874{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> add}
+#  35: @Scripts_Agent_SRC_SRC_construct_807:CNode_875{[0]: CNode_874, [1]: encoder_states, [2]: CNode_873}
+#  36: @Scripts_Agent_SRC_SRC_construct_807:CNode_876{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> add}
+#  37: @Scripts_Agent_SRC_SRC_construct_807:CNode_877{[0]: CNode_876, [1]: CNode_875, [2]: targets}
+#  38: @Scripts_Agent_SRC_SRC_construct_807:CNode_878{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  40: @Scripts_Agent_SRC_SRC_construct_807:blend1{[0]: CNode_862, [1]: CNode_877}
+#  41: @Scripts_Agent_SRC_SRC_construct_807:CNode_816{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:Scripts.Agent.SRC', [2]: ValueNode<Symbol> mnp}
+#  42: @Scripts_Agent_SRC_SRC_construct_807:CNode_817{[0]: ValueNode<Primitive> getattr, [1]: CNode_816, [2]: ValueNode<StringImm> zeros_like}
+#  43: @Scripts_Agent_SRC_SRC_construct_807:CNode_818{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> getitem}
+#  44: @Scripts_Agent_SRC_SRC_construct_807:CNode_822{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  45: @Scripts_Agent_SRC_SRC_construct_807:CNode_823{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_slice}
+#  46: @Scripts_Agent_SRC_SRC_construct_807:CNode_824{[0]: CNode_823, [1]: ValueNode<None> None, [2]: ValueNode<None> None, [3]: ValueNode<None> None}
+#  47: @Scripts_Agent_SRC_SRC_construct_807:CNode_825{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_slice}
+#  48: @Scripts_Agent_SRC_SRC_construct_807:CNode_826{[0]: CNode_825, [1]: ValueNode<Int64Imm> 0, [2]: ValueNode<Int64Imm> 1, [3]: ValueNode<None> None}
+#  49: @Scripts_Agent_SRC_SRC_construct_807:CNode_827{[0]: CNode_822, [1]: CNode_824, [2]: CNode_826}
+#  50: @Scripts_Agent_SRC_SRC_construct_807:CNode_828{[0]: CNode_818, [1]: encoder_states, [2]: CNode_827}
+#  51: @Scripts_Agent_SRC_SRC_construct_807:CNode_879{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  53: @Scripts_Agent_SRC_SRC_construct_807:decoder_input{[0]: CNode_817, [1]: CNode_828}
+#  54: @Scripts_Agent_SRC_SRC_construct_807:CNode_852{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  55: @Scripts_Agent_SRC_SRC_construct_807:CNode_853{[0]: CNode_852, [1]: ValueNode<ValueList> [], [2]: ValueNode<ValueList> []}
+#  56: @Scripts_Agent_SRC_SRC_construct_807:CNode_851{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> getitem}
+#  57: @Scripts_Agent_SRC_SRC_construct_807:probs{[0]: CNode_851, [1]: CNode_853, [2]: ValueNode<Int64Imm> 0}
+#  58: @Scripts_Agent_SRC_SRC_construct_807:paths{[0]: CNode_851, [1]: CNode_853, [2]: ValueNode<Int64Imm> 1}
+#  59: @Scripts_Agent_SRC_SRC_construct_807:CNode_880{[0]: ValueNode<Primitive> getattr, [1]: CNode_816, [2]: ValueNode<StringImm> arange}
+#  60: @Scripts_Agent_SRC_SRC_construct_807:CNode_881{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> getitem}
+#  61: @Scripts_Agent_SRC_SRC_construct_807:CNode_882{[0]: ValueNode<Primitive> getattr, [1]: encoder_states, [2]: ValueNode<StringImm> shape}
+#  62: @Scripts_Agent_SRC_SRC_construct_807:CNode_883{[0]: CNode_881, [1]: CNode_882, [2]: ValueNode<Int64Imm> 0}
+#  63: @Scripts_Agent_SRC_SRC_construct_807:CNode_884{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  65: @Scripts_Agent_SRC_SRC_construct_807:a1{[0]: CNode_880, [1]: CNode_883}
+#  66: @Scripts_Agent_SRC_SRC_construct_807:CNode_832{[0]: ValueNode<Primitive> getattr, [1]: CNode_816, [2]: ValueNode<StringImm> zeros_like}
+#  67: @Scripts_Agent_SRC_SRC_construct_807:CNode_834{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> getitem}
+#  68: @Scripts_Agent_SRC_SRC_construct_807:CNode_835{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  69: @Scripts_Agent_SRC_SRC_construct_807:CNode_836{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_slice}
+#  70: @Scripts_Agent_SRC_SRC_construct_807:CNode_837{[0]: CNode_836, [1]: ValueNode<None> None, [2]: ValueNode<None> None, [3]: ValueNode<None> None}
+#  71: @Scripts_Agent_SRC_SRC_construct_807:CNode_838{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_slice}
+#  72: @Scripts_Agent_SRC_SRC_construct_807:CNode_839{[0]: CNode_838, [1]: ValueNode<None> None, [2]: ValueNode<None> None, [3]: ValueNode<None> None}
+#  73: @Scripts_Agent_SRC_SRC_construct_807:CNode_840{[0]: CNode_835, [1]: CNode_837, [2]: CNode_839, [3]: ValueNode<Int64Imm> 0}
+#  74: @Scripts_Agent_SRC_SRC_construct_807:CNode_841{[0]: CNode_834, [1]: encoder_states, [2]: CNode_840}
+#  75: @Scripts_Agent_SRC_SRC_construct_807:CNode_833{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  76: @Scripts_Agent_SRC_SRC_construct_807:CNode_842{[0]: CNode_833, [1]: CNode_841}
+#  77: @Scripts_Agent_SRC_SRC_construct_807:CNode_847{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:Scripts.Agent.SRC', [2]: ValueNode<Symbol> dtype}
+#  78: @Scripts_Agent_SRC_SRC_construct_807:CNode_848{[0]: ValueNode<Primitive> getattr, [1]: CNode_847, [2]: ValueNode<StringImm> bool_}
+#  79: @Scripts_Agent_SRC_SRC_construct_807:CNode_844{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  80: @Scripts_Agent_SRC_SRC_construct_807:CNode_845{[0]: CNode_844, [1]: ValueNode<StringImm> dtype}
+#  81: @Scripts_Agent_SRC_SRC_construct_807:CNode_846{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  82: @Scripts_Agent_SRC_SRC_construct_807:CNode_849{[0]: CNode_846, [1]: CNode_848}
+#  83: @Scripts_Agent_SRC_SRC_construct_807:CNode_843{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_dict}
+#  84: @Scripts_Agent_SRC_SRC_construct_807:CNode_850{[0]: CNode_843, [1]: CNode_845, [2]: CNode_849}
+#  85: @Scripts_Agent_SRC_SRC_construct_807:selected{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_832, [2]: CNode_842, [3]: CNode_850}
+#  86: @Scripts_Agent_SRC_SRC_construct_807:CNode_885{[0]: ValueNode<Primitive> getattr, [1]: CNode_816, [2]: ValueNode<StringImm> full_like}
+#  87: @Scripts_Agent_SRC_SRC_construct_807:CNode_886{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> neg}
+#  88: @Scripts_Agent_SRC_SRC_construct_807:CNode_887{[0]: CNode_886, [1]: ValueNode<FP32Imm> 1e+09}
+#  89: @Scripts_Agent_SRC_SRC_construct_807:CNode_888{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  90: @Scripts_Agent_SRC_SRC_construct_807:CNode_889{[0]: CNode_888, [1]: selected, [2]: CNode_887}
+#  91: @Scripts_Agent_SRC_SRC_construct_807:CNode_890{[0]: ValueNode<Primitive> getattr, [1]: CNode_847, [2]: ValueNode<StringImm> float32}
+#  92: @Scripts_Agent_SRC_SRC_construct_807:CNode_891{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  93: @Scripts_Agent_SRC_SRC_construct_807:CNode_892{[0]: CNode_891, [1]: ValueNode<StringImm> dtype}
+#  94: @Scripts_Agent_SRC_SRC_construct_807:CNode_893{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  95: @Scripts_Agent_SRC_SRC_construct_807:CNode_894{[0]: CNode_893, [1]: CNode_890}
+#  96: @Scripts_Agent_SRC_SRC_construct_807:CNode_895{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_dict}
+#  97: @Scripts_Agent_SRC_SRC_construct_807:CNode_896{[0]: CNode_895, [1]: CNode_892, [2]: CNode_894}
+#  98: @Scripts_Agent_SRC_SRC_construct_807:minimum_fill{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_885, [2]: CNode_889, [3]: CNode_896}
+#  99: @Scripts_Agent_SRC_SRC_construct_807:CNode_897{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> len}
+# 100: @Scripts_Agent_SRC_SRC_construct_807:CNode_898{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> getitem}
+# 101: @Scripts_Agent_SRC_SRC_construct_807:CNode_899{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> iter}
+# 102: @Scripts_Agent_SRC_SRC_construct_807:CNode_900{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:Scripts.Agent.SRC', [2]: ValueNode<Symbol> range}
+# 103: @Scripts_Agent_SRC_SRC_construct_807:CNode_901{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+# 105: @Scripts_Agent_SRC_SRC_construct_807:CNode_902{[0]: CNode_900, [1]: param_n}
+# 106: @Scripts_Agent_SRC_SRC_construct_807:CNode_903{[0]: CNode_899, [1]: CNode_902}
+# 107: @Scripts_Agent_SRC_SRC_construct_807:CNode_904{[0]: CNode_897, [1]: CNode_903}
+# 108: @Scripts_Agent_SRC_SRC_construct_807:CNode_905{[0]: ValueNode<FuncGraph> ↵Scripts_Agent_SRC_SRC_construct_855, [1]: ValueNode<Int64Imm> 0, [2]: decoder_input, [3]: states, [4]: blend1, [5]: CNode_816, [6]: selected, [7]: minimum_fill, [8]: CNode_863, [9]: a1, [10]: ValueNode<ValueList> [], [11]: param_origin_path, [12]: encoder_states, [13]: paths, [14]: probs}
+# 109: @Scripts_Agent_SRC_SRC_construct_807:CNode_815{[0]: ValueNode<Primitive> Return, [1]: CNode_854}
+# 110: @Scripts_Agent_SRC_SRC_construct_807:CNode_854{[0]: ValueNode<FuncGraph> ↵Scripts_Agent_SRC_SRC_construct_855, [1]: ValueNode<Int64Imm> 0, [2]: decoder_input, [3]: states, [4]: selected, [5]: ValueNode<ValueList> [], [6]: paths, [7]: probs}
+
+
+subgraph attr:
+training: 0
+subgraph instance: begin_episode_808 : 0x134239b0
+# In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:40~49, 4~30/    @ms_function/
+subgraph @begin_episode_808(%para0_targets, %para0_initial_logs, %para0_initial_log_scores) {
+  %0(CNode_906) = resolve(NameSpace[Ast: 'Namespace:mindspore._extends.parse.trope'], is_not)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:44, 11~35/        if initial_logs is not None:/
+  %1(CNode_907) = %0(%para0_initial_logs, None)
+      : (<Tensor[Int32], (1, 10)>, <None, NoShape>) -> (<Bool, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:44, 11~35/        if initial_logs is not None:/
+  %2(CNode_908) = Cond(%1, Bool(0))
+      : (<Bool, NoShape>, <Bool, NoShape>) -> (<Bool, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:44~48, 8~35/        if initial_logs is not None:/
+  %3(CNode_909) = Switch(%2, @✓begin_episode_809, @✗begin_episode_910)
+      : (<Bool, NoShape>, <Func, NoShape>, <Func, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:44~48, 8~35/        if initial_logs is not None:/
+
+#------------------------> 2
+  %4(CNode_911) = %3()
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:44~48, 8~35/        if initial_logs is not None:/
+  %5(CNode_912) = call @↓begin_episode_913(%4)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:59, 26~44/        targets, states = self.begin_episode(targets, initial_logs, initial_log_scores)/
+  Return(%5)
+      : (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:44~48, 8~35/        if initial_logs is not None:/
+}
+# Order:
+#   1: @begin_episode_808:CNode_914{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> l2}
+#   2: @begin_episode_808:CNode_915{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:Scripts.Agent.SRC', [2]: ValueNode<Symbol> ops}
+#   3: @begin_episode_808:CNode_916{[0]: ValueNode<Primitive> getattr, [1]: CNode_915, [2]: ValueNode<StringImm> mean}
+#   4: @begin_episode_808:CNode_917{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> embedding}
+#   5: @begin_episode_808:CNode_918{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   7: @begin_episode_808:CNode_919{[0]: CNode_917, [1]: param_targets}
+#   8: @begin_episode_808:CNode_920{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   9: @begin_episode_808:CNode_921{[0]: CNode_920, [1]: CNode_919}
+#  10: @begin_episode_808:CNode_922{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  11: @begin_episode_808:CNode_923{[0]: CNode_922, [1]: ValueNode<StringImm> axis, [2]: ValueNode<StringImm> keep_dims}
+#  12: @begin_episode_808:CNode_924{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  13: @begin_episode_808:CNode_925{[0]: CNode_924, [1]: ValueNode<Int64Imm> 1, [2]: ValueNode<BoolImm> true}
+#  14: @begin_episode_808:CNode_926{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> make_dict}
+#  15: @begin_episode_808:CNode_927{[0]: CNode_926, [1]: CNode_923, [2]: CNode_925}
+#  16: @begin_episode_808:CNode_928{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_916, [2]: CNode_921, [3]: CNode_927}
+#  17: @begin_episode_808:CNode_929{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  19: @begin_episode_808:targets{[0]: CNode_914, [1]: CNode_928}
+#  20: @begin_episode_808:CNode_906{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> is_not}
+#  21: @begin_episode_808:CNode_907{[0]: CNode_906, [1]: param_initial_logs, [2]: ValueNode<None> None}
+#  22: @begin_episode_808:CNode_908{[0]: ValueNode<Primitive> Cond, [1]: CNode_907, [2]: ValueNode<BoolImm> false}
+#  23: @begin_episode_808:CNode_930{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> step}
+#  24: @begin_episode_808:CNode_909{[0]: ValueNode<Primitive> Switch, [1]: CNode_908, [2]: ValueNode<FuncGraph> ✓begin_episode_809, [3]: ValueNode<FuncGraph> ✗begin_episode_910}
+#  25: @begin_episode_808:CNode_911{[0]: CNode_909}
+#  26: @begin_episode_808:CNode_912{[0]: ValueNode<FuncGraph> ↓begin_episode_913, [1]: CNode_911}
+#  27: @begin_episode_808:CNode_931{[0]: ValueNode<Primitive> Return, [1]: CNode_912}
+
+
+subgraph attr:
+training: 0
+subgraph instance: ✓begin_episode_809 : 0xdb7ea40
+# In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:40~49, 4~30/    @ms_function/
+subgraph @✓begin_episode_809 parent: [subgraph @begin_episode_808]() {
+  %0(CNode_930) = resolve(NameSpace[ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>'], step)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:45, 21~30/            states = self.step(initial_logs, initial_log_scores, None)/
+
+#------------------------> 3
+  %1(states) = %0($(@begin_episode_808:para0_initial_logs), $(@begin_episode_808:para0_initial_log_scores), None)
+      : (<Tensor[Int32], (1, 10)>, <Tensor[Float32], (1, 1)>, <None, NoShape>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:45, 21~70/            states = self.step(initial_logs, initial_log_scores, None)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:45, 12~70/            states = self.step(initial_logs, initial_log_scores, None)/
+}
+# Order:
+#   1: @✓begin_episode_809:CNode_932{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   3: @✓begin_episode_809:states{[0]: CNode_930, [1]: param_initial_logs, [2]: param_initial_log_scores, [3]: ValueNode<None> None}
+#   4: @✓begin_episode_809:CNode_933{[0]: ValueNode<FuncGraph> ↓begin_episode_913, [1]: targets, [2]: states}
+#   5: @✓begin_episode_809:CNode_934{[0]: ValueNode<Primitive> Return, [1]: states}
+#   6: @✓begin_episode_809:CNode_935{[0]: ValueNode<FuncGraph> ↓begin_episode_913, [1]: states}
+
+
+subgraph attr:
+training: 0
+subgraph instance: step_810 : 0x119dc290
+# In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:51~55, 4~21/    def step(self, x, score, states):/
+subgraph @step_810(%para0_x, %para0_score, %para0_states) {
+  %0(CNode_936) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], getitem)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:54, 8~49/        _, states = self.state_encoder(x, states)/
+  %1(CNode_937) = resolve(NameSpace[ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>'], state_encoder)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:54, 20~38/        _, states = self.state_encoder(x, states)/
+  %2(CNode_938) = resolve(NameSpace[ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>'], l1)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 12~19/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %3(CNode_939) = resolve(NameSpace[SymbolStr: 'Namespace:Scripts.Agent.SRC'], ops)
+      : (<External, NoShape>, <External, NoShape>) -> (<External, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 20~23/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %4(CNode_940) = getattr(%3, "concat")
+      : (<External, NoShape>, <String, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 20~30/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %5(CNode_941) = resolve(NameSpace[CommonOPS: 'Namespace:mindspore._extends.parse.trope'], MakeTuple)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 31~57/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %6(CNode_942) = resolve(NameSpace[ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>'], embedding)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:52, 12~26/        x = self.embedding(x)/
+  %7(x) = %6(%para0_x)
+      : (<Tensor[Int32], (1, 10)>) -> (<Tensor[Float32], (1, 10, 128)>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:52, 12~29/        x = self.embedding(x)/
+  %8(CNode_943) = getattr(%para0_score, "expand_dims")
+      : (<Tensor[Float32], (1, 1)>, <String, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 35~52/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %9(CNode_944) = resolve(NameSpace[Ast: 'Namespace:mindspore._extends.parse.trope'], neg)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 53~55/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %10(CNode_945) = %9(I64(1))
+      : (<Int64, NoShape>) -> (<Int64, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 53~55/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %11(CNode_946) = %8(%10)
+      : (<Int64, NoShape>) -> (<Tensor[Float32], (1, 1, 1)>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 35~56/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %12(CNode_947) = %5(%7, %11)
+      : (<Tensor[Float32], (1, 10, 128)>, <Tensor[Float32], (1, 1, 1)>) -> (<Tuple[Tensor[Float32]*2], TupleShape((1, 10, 128), (1, 1, 1))>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 31~57/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %13(CNode_948) = resolve(NameSpace[Ast: 'Namespace:mindspore._extends.parse.trope'], neg)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 59~61/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %14(CNode_949) = %13(I64(1))
+      : (<Int64, NoShape>) -> (<Int64, NoShape>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 59~61/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+
+#------------------------> 4
+  %15(CNode_950) = %4(%12, %14)
+      : (<Tuple[Tensor[Float32]*2], TupleShape((1, 10, 128), (1, 1, 1))>, <Int64, NoShape>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 20~62/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %16(x) = %2(%15)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:53, 12~63/        x = self.l1(ops.concat((x, score.expand_dims(-1)), -1))/
+  %17(CNode_951) = %1(%16, %para0_states)
+      : (<null>, <None, NoShape>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:54, 20~49/        _, states = self.state_encoder(x, states)/
+  %18(_) = %0(%17, I64(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:54, 8~49/        _, states = self.state_encoder(x, states)/
+  %19(CNode_952) = StopGradient(%18)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:51~55, 4~21/    def step(self, x, score, states):/
+  %20(states) = %0(%17, I64(1))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:54, 8~49/        _, states = self.state_encoder(x, states)/
+  %21(CNode_953) = Depend(%20, %19) primitive_attrs: {side_effect_propagate: I64(1)} cnode_attrs: {topo_sort_rhs_first: Bool(1)}
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:54, 8~49/        _, states = self.state_encoder(x, states)/
+  Return(%21)
+      : (<null>)
+      #scope: (Default)
+      # In file /mnt/hpfs/xiangc/mxy/lpr-r1/DKT/Scripts/Agent/SRC.py:55, 8~21/        return states/
+}
+# Order:
+#   1: @step_810:CNode_942{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> embedding}
+#   2: @step_810:CNode_954{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   4: @step_810:x{[0]: CNode_942, [1]: param_x}
+#   5: @step_810:CNode_938{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> l1}
+#   6: @step_810:CNode_939{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:Scripts.Agent.SRC', [2]: ValueNode<Symbol> ops}
+#   7: @step_810:CNode_940{[0]: ValueNode<Primitive> getattr, [1]: CNode_939, [2]: ValueNode<StringImm> concat}
+#   8: @step_810:CNode_941{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   9: @step_810:CNode_943{[0]: ValueNode<Primitive> getattr, [1]: param_score, [2]: ValueNode<StringImm> expand_dims}
+#  10: @step_810:CNode_944{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> neg}
+#  11: @step_810:CNode_945{[0]: CNode_944, [1]: ValueNode<Int64Imm> 1}
+#  12: @step_810:CNode_955{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  14: @step_810:CNode_946{[0]: CNode_943, [1]: CNode_945}
+#  15: @step_810:CNode_947{[0]: CNode_941, [1]: x, [2]: CNode_946}
+#  16: @step_810:CNode_948{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> neg}
+#  17: @step_810:CNode_949{[0]: CNode_948, [1]: ValueNode<Int64Imm> 1}
+#  18: @step_810:CNode_956{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  20: @step_810:CNode_950{[0]: CNode_940, [1]: CNode_947, [2]: CNode_949}
+#  21: @step_810:CNode_957{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  23: @step_810:x{[0]: CNode_938, [1]: CNode_950}
+#  24: @step_810:CNode_937{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:Scripts.Agent.SRC..<SRC::140491298296400>', [2]: ValueNode<Symbol> state_encoder}
+#  25: @step_810:CNode_958{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  27: @step_810:CNode_951{[0]: CNode_937, [1]: x, [2]: param_states}
+#  28: @step_810:CNode_936{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> getitem}
+#  29: @step_810:_{[0]: CNode_936, [1]: CNode_951, [2]: ValueNode<Int64Imm> 0}
+#  30: @step_810:states{[0]: CNode_936, [1]: CNode_951, [2]: ValueNode<Int64Imm> 1}
+#  32: @step_810:CNode_959{[0]: ValueNode<Primitive> Return, [1]: CNode_953}
+
+
+subgraph attr:
+subgraph instance: concat_811 : 0xbf44d90
+# In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/function/array_func.py:359~370/def concat(tensors, axis=0):/
+subgraph @concat_811(%para0_tensors, %para0_axis) {
+  %0(CNode_960) = resolve(NameSpace[SymbolStr: 'Namespace:mindspore.ops.function.array_func'], cat)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/function/array_func.py:370, 11~14/    return cat(tensors, axis)/
+
+#------------------------> 5
+  %1(CNode_961) = %0(%para0_tensors, %para0_axis)
+      : (<Tuple[Tensor[Float32]*2], TupleShape((1, 10, 128), (1, 1, 1))>, <Int64, NoShape>) -> (<null>)
+      #scope: (Default)
+      # In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/function/array_func.py:370, 11~29/    return cat(tensors, axis)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/function/array_func.py:370, 4~29/    return cat(tensors, axis)/
+}
+# Order:
+#   1: @concat_811:CNode_960{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:mindspore.ops.function.array_func', [2]: ValueNode<Symbol> cat}
+#   2: @concat_962:CNode_963{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   3: @concat_811:CNode_961{[0]: CNode_960, [1]: param_tensors, [2]: param_axis}
+#   4: @concat_811:CNode_964{[0]: ValueNode<Primitive> Return, [1]: CNode_961}
+
+
+subgraph attr:
+subgraph instance: cat_812 : 0x127112b0
+# In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/auto_generate/gen_ops_def.py:6412~6442/def cat(tensors, axis=0):/
+subgraph @cat_812(%para0_tensors, %para0_axis) {
+  %0(CNode_965) = resolve(NameSpace[SymbolStr: 'Namespace:mindspore.ops.auto_generate.gen_ops_def'], concat_impl)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/auto_generate/gen_ops_def.py:6442, 11~22/    return concat_impl(tensors, axis)/
+
+#------------------------> 6
+  %1(CNode_966) = %0(%para0_tensors, %para0_axis)
+      : (<Tuple[Tensor[Float32]*2], TupleShape((1, 10, 128), (1, 1, 1))>, <Int64, NoShape>) -> (<null>)
+      #scope: (Default)
+      # In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/auto_generate/gen_ops_def.py:6442, 11~37/    return concat_impl(tensors, axis)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file /home/xiangc/anaconda3/envs/lprr1/lib/python3.11/site-packages/mindspore/ops/auto_generate/gen_ops_def.py:6442, 4~37/    return concat_impl(tensors, axis)/
+}
+# Order:
+#   1: @cat_812:CNode_965{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:mindspore.ops.auto_generate.gen_ops_def', [2]: ValueNode<Symbol> concat_impl}
+#   2: @cat_967:CNode_968{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   3: @cat_812:CNode_966{[0]: CNode_965, [1]: param_tensors, [2]: param_axis}
+#   4: @cat_812:CNode_969{[0]: ValueNode<Primitive> Return, [1]: CNode_966}
+
+
+# ===============================================================================================
+# The total of function graphs in evaluation stack: 7/8 (Ignored 1 internal frames).
+# ===============================================================================================
+
+
+# ===============================================================================================
+# The rest function graphs are the following:
+# ===============================================================================================
+No more function graphs.
+
