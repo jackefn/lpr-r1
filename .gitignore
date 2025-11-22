@@ -32,6 +32,7 @@ data/
 DKT/data/
 DKT/SavedModels/
 generate_kg/openrouter_api_key.txt
+graphr1_api/expr/
 # *.csv
 # *.json
 # *.pkl
