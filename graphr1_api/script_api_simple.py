@@ -177,35 +177,30 @@ async def process_queries(
         hyperedges_found = [corpus_hyperedge[idx] for idx in hyperedge_ids[i] if idx < len(corpus_hyperedge)]
         
         # 对每个实体找前置概念
-        all_prerequisites = []
-        learning_paths = []
-        concept_details = []
+        all_prerequisites_names = set()  # 使用set去重
         
         for entity in entities_found[:3]:  # 只处理 top 3
-            # 获取概念信息
-            info = get_concept_info(entity)
-            if info:
-                concept_details.append(info)
+            # 找前置概念（只保留直接前置，depth<=1）
+            prereqs = find_prerequisites(entity, max_depth=1)
             
-            # 找前置概念
-            prereqs = find_prerequisites(entity, max_depth=max_depth)
-            all_prerequisites.extend(prereqs)
-            
-            # 找学习路径（从根节点到该概念）
-            root_nodes = [n for n in G.nodes() if G.in_degree(n) == 0]
-            paths = find_learning_path(root_nodes[:5], entity)
-            learning_paths.extend(paths)
+            # 只收集直接前置的概念名称（depth=0）
+            for p in prereqs:
+                if p['depth'] == 0:
+                    all_prerequisites_names.add(p['prerequisite'])
         
-        # 构建结果
+        # 转换为列表并限制数量
+        prerequisites_list = sorted(list(all_prerequisites_names))[:8]  # 最多8个
+        
+        # 构建超简化结果（方案2：超简版）
         results.append({
             'query': query,
-            'entity_candidates': entities_found,
-            'hyperedge_candidates': hyperedges_found,
-            'concept_details': concept_details,
-            'prerequisites': all_prerequisites[:20],  # 限制数量
-            'learning_paths': [{'path': p, 'length': len(p)-1} for p in learning_paths[:5]],
-            'num_prerequisites': len(all_prerequisites),
-            'num_paths': len(learning_paths)
+            'concepts': entities_found[:3],  # 查询到的相关概念（top-3）
+            'prerequisites': prerequisites_list,  # 可推荐的前置概念列表（去重、扁平化）
+            # 移除所有冗余信息：
+            # - concept_details（包含in_degree, out_degree, dependents等无用元数据）
+            # - prerequisites的详细字段（type, confidence, target等）
+            # - learning_paths（包含大量基础概念，噪音大）
+            # - hyperedge_candidates（冗长文本描述）
         })
     
     return results
